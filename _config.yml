@@ -15,11 +15,11 @@
 minimal_mistakes_skin    : "air" # "default", "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
 
 # Site Settings
-locale                   : "ko"
+locale                   : "en-US"
 title                    : "Jungyun's tech blog"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
-name                     : "JO JUNGYUN (조중윤, チョ·ジュンユン)"
+name                     : "Jo Jung-yun (조중윤)"
 description              : "What I have learned, what I want share"
 url                      : "https://jung-yun.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
@@ -102,9 +102,9 @@ analytics:
 
 # Site Author
 author:
-  name             : "JO JUNGYUN (조중윤, チョ·ジュンユン)"
+  name             : "Jo Jung-yun"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "I am an **amazing** person."
+  bio              : "iOS Developer in **MOAIS**."
   location         : "Seoul, South korea"
   email            : "tgms021@gmail.com"
   links:
