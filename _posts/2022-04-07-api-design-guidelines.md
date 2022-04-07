@@ -132,14 +132,101 @@ last_modified_at: "2022-04-07"
           
         때때로, 타입 정보를 반복하는 것이 애매모호함을 줄이기 위해 필요할 때도 있다, 하지만 보통 파라미터의 역할을 적시하는 것이 타입을 적는 것보다 좋다. 디테일을 위해 다음 아이템을 보자.
 
-## 능수능란한 사용을 위해 노력해라
+## 유창한 사용을 위해 노력해라
+- 메서드 이름은 영어 문법에 맞는 문장이 되도록 노력해라
+    ```swift
+    /// 옳은 예시
+    x.insert(y, at: z)          “x, insert y at z”
+    x.subViews(havingColor: y)  “x's subviews having color y”
+    x.capitalizingNouns()       “x, capitalizing nouns”
+    ```
+    
+    ```swift
+    /// 나쁜 예시
+    x.insert(y, position: z)
+    x.subViews(color: y)
+    x.nounCapitalize()
+    ```
+      
+    만약 첫 번째나 두 번째 argument 이후의 argument가 call의 핵심 의미에 영향을 주지 않는다면 그 땐 문장의 문법에 신경쓰지 않아도 좋다.
+      
+    ```swift
+    AudioUnit.instantiate(
+    with: description, 
+    options: [.inProcess], completionHandler: stopProgressBar)
+    ```
+    
+- **팩토리 메서드의 이름을 "make"로 시작해라**, e.g. x.makeIterator().
+- 이니셜라이저나 팩토리 메서드의 첫번째 argument는 메서드 이름으로 시작되는 문장의 일부가 돼서는 안된다.
+    ```swift
+    /// 옳은 예시
+    let foreground = Color(red: 32, green: 64, blue: 128)
+    let newPart = factory.makeWidget(gears: 42, spindles: 14)
+    let ref = Link(target: destination)
+    ```
+    
+    ```swift
+    /// 나쁜 예시
+    let foreground = Color(havingRGBValuesRed: 32, green: 64, andBlue: 128)
+    let newPart = factory.makeWidget(havingGearCount: 42, andSpindleCount: 14)
+    let ref = Link(to: destination)
+    ```
+    
+    실제론 이 규칙과 argument labels 규칙이 합쳐서 value preserving type conversion이 아닌 경우에만 첫 argument의 label이 가능한 것으로 이해하면 된다.
+    ```
+    let rgbForeground = RGBColor(cmykForeground)
+    ```
+
+- 부수 효과(side-effect)를 고려해서 메서드 이름을 지어라.
+    - 부수 효과가 없는 메서드는 명사로 읽혀져야 한다, e.g. x.distance(to: y), i.successor().
+    - 부수 효과가 있는 경우 명령형의 동사를 사용한다, e.g. print(x), x.sort(), x.append(y)
+    - Mutating/nonmutating 메서드 쌍을 일관되게 이름 짓는다. Mutating 메서드는 보통 같은 의미의 nonmutating 메서드를 가진다. 그 자리에서 개체를 업데이트하는 mutating 메서드와 다르게 nonmutating 메서드는 새로운 값을 만들어 리턴한다.
+        - 메서드의 동작이 자연스럽게 동사로 표현되는 경우, mutating 메서드에는 명령형을 쓰고, "ed", "ing" 등의 접미사를 써서 nonmutating 메서드를 네이밍해라.
+            |---|---|
+            |x.sort()|z = x.sorted()|
+            |x.append(y)|z = x.appending(y)|
+            
+            - nonmutating 메서드는 과거형(흔히 "ed")를 쓰는 것을 선호해라.
+                ```swift
+                /// `self`를 그 자리에서 뒤집는다.
+                mutating func reverse()
+
+                /// `self`의 복사본에서 그 값을 뒤집어 리턴한다.
+                func reversed() -> Self
+                ...
+                x.reverse()
+                let y = x.reversed()
+                ```
+                
+            - "ed"를 영어 문법 상 붙이기 어색할때, nonmutating 메서드를 현재형("ing")으로 선언해라.
+                ```swift
+                /// `self`의 newlines에서 공백을 제거한다.
+                mutating func stripNewlines()
+
+                ///  `self`의 복사본에서 공백을 제거하고 리턴한다.
+                func strippingNewlines() -> String
+                ...
+                s.stripNewlines()
+                let oneLine = t.strippingNewlines()
+                ```
+                
+        - 동작이 자연스럽게 명사로 표현된 경우, nonmutating 메서드는 명사로 표현하고 mutating 메서드는 "form" 접두어를 붙여 표현해라.
+            |---|---|
+            |x = y.union(z)|y.formUnion(z)|
+            |j = c.successor(i)|c.formSuccessor(&i)|
+            
+- 불리언 메서드와 프로퍼티는 nonmutating일 경우 **주장(assertion)으로 받아들여질 수 있어야한다,**e.g. x.isEmpty, line1.intersects(line2).
+- 무엇인지 표현하는 프로토콜은 명사로 표현된다(e.g. Collection). 
+- Capability를 나타내는 프로토토콜은 able, ible, **or** ing 접미사로 표현한다(e.g. Equatable, ProgressReporting).
+- 다른 타입, 프로퍼티, 변수, 그리고 상수는 명사로 읽혀야 한다.
+
 
 ## 전문 용어를 잘 사용해라
 
 
 # 관습(Conventions)
 
-## 일반적인 고나습
+## 일반적인 관습
 
 ## 파라미터
 
