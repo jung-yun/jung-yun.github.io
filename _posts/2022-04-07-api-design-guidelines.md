@@ -1,5 +1,5 @@
 ---
-layout: single
+layout: post
 title: "API 디자인 가이드라인(API Design Guidelines) Swift"
 date: "2022-04-07"
 last_modified_at: "2022-04-08"
@@ -273,7 +273,6 @@ last_modified_at: "2022-04-08"
     ```
     
 - 메서드들이 같은 의미를 공유하거나 서로 다른 도메인에서 작동한다면 **메서드는 이름을 공유할 수 있다.**
-
     예를들어 아래는 권장할만 하다. 메서드들은 본질적으로 같은 일을 하기 때문이다.
     
         ```swift
@@ -289,7 +288,7 @@ last_modified_at: "2022-04-08"
         func contains(_ other: LineSegment) -> Bool { ... }
         }
         ```
-
+    
     그리고 geometric 타입과 collection은 서로 다른 도메인이므로, 아래의 경우도 가능하다.
     
         ```swift
@@ -334,8 +333,6 @@ last_modified_at: "2022-04-08"
 > func move(from **start**: Point, to **end**: Point)
 
 - 문서화를 위한 파라미터 이름을 선택해라. 파라미터 이름은 메서드를 이용할 때 사용되진 않지만 메서드에 대해 설명하는데 중요한 역할을 한다.
-
-
     문서를 읽기 쉽게 파라미터 이름을 설정해라. 예를들어 아래의 이름은 문서를 읽기 쉽게 한다.
     
         ```swift
@@ -361,7 +358,6 @@ last_modified_at: "2022-04-08"
         ``` 
     
 - 일반적인 사용을 편하게 하기 위해 **default 파라미터를 적극활용해라.** 사용성이 단일한 파라미터는 default 값으로 대체 가능하다.
-    
     예를들어 Default arguments는 관련없는 정보를 숨겨서 가독성을 향상시킨다.
     
         ```swift
@@ -417,8 +413,7 @@ last_modified_at: "2022-04-08"
 
 - **arguments간 구분이 딱히 필요하지 않을 때는 모든 레이블을 생략하라.** 예를들어 min(number1, number2), zip(sequence1, sequence2)
 - **이니셜라이저가 value preserving type conversion를 수행할 때는 첫 번째 레이블을 생략해라.** 예를들어 Int64(someUInt32)
-     
-    첫 번째 argument는 항상 conversion의 소스가 돼야한다.
+     첫 번째 argument는 항상 conversion의 소스가 돼야한다.
     
         ```swift
         extension String {
@@ -447,7 +442,6 @@ last_modified_at: "2022-04-08"
         ```
     
 - **첫 번째 argument가 전치사구와 같은 역할을 할 때는, 레이블을 적어라.** augument label는 보통 전치사로 시작해야한다, e.g. x.removeBoxes(havingLength: 12).
-    
     예외는 첫 번째 두 argument가 똑같은 추상의 일부분씩 표현하는 경우, 예를들어
     
         ```swift
@@ -457,6 +451,7 @@ last_modified_at: "2022-04-08"
         ```
         
     위와 같은 경우 전치사 이후에 argument label을 시작해서 그 의미를 명확하게 할 수 있다.
+    
         ```swift
         /// 좋은 예시
         a.moveTo(x: b, y: c)
@@ -464,7 +459,6 @@ last_modified_at: "2022-04-08"
         ```
         
 - **하지만 argument label이 아니라 argument 자체가 문법에 맞는 구절을 만들어낸다면, 레이블을 생략해라.** 예를들어 x.addSubview(y)
-
     반대로 만약 argument가 그 자체로 문법에 맞는 구절을 만들어내지 않는다면, 레이블을 붙여라.
     
         ```swift
@@ -472,7 +466,7 @@ last_modified_at: "2022-04-08"
         let text = words.split(maxSplits: 12)
         let studentsByName = students.sorted(isOrderedBefore: Student.namePrecedes)
         ```
-    
+        
     구절이 항상 옳은 의미를 전달하는 것이 중요하단 걸 생각해라. 아래의 예는 문법상 맞지만 의미가 애매모호하다.
     
         ```swift
@@ -485,7 +479,6 @@ last_modified_at: "2022-04-08"
 # Special Instructions
 
 - API에 나타나는 튜플의 멤버와 클로져의 parameter을 레이블링 하라.
-
     이러한 이름들로 설명하기가 쉬워지고, 해당 요소들이 문서에 언급될 수 있으며, 튜플 요소에 접근하는 표현을 가능하게 한다.
     
         ```swift
@@ -509,7 +502,6 @@ last_modified_at: "2022-04-08"
     클로져 파라미터로 선택되는 이름들은 top-level functions을 위한 parameter names처럼 선택되야 한다. 클로져 argument label들은 호출시 사용이 허용되지 않는다.
     
 - 오버로드 세트의 애매모호함을 피하기 위해서 unconstrained polymorphism 사용에 주의해라(e.g. Any, AnyObject, 그리고 unconstrained generic parameters).
-       
     예를들어 아래의 오버로드 세트를 살펴보면
     
         ```swift
@@ -547,8 +539,13 @@ last_modified_at: "2022-04-08"
         
     또 이때 앞서 말했던 labeling이 문서에서의 언급을 어떻게 용의하게 하는지도 알 수 있다.
     
-    
 
 ---
     
 # 실무에서 내가 제안하는 스타일 가이드
+
+
+# References
+
+- [API Design Guidelines](https://www.swift.org/documentation/api-design-guidelines/)
+-  
