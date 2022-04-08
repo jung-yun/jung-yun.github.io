@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 title: "API 디자인 가이드라인(API Design Guidelines) Swift"
 date: "2022-04-07"
 last_modified_at: "2022-04-08"
@@ -49,22 +49,22 @@ last_modified_at: "2022-04-08"
            ```
                
     - 이니셜라이저가 무엇을 만들어내는지 명시해라
-            ```swift
-           /// `x`를 `n`개 가진 객체를 만든다.
-           init(count n: Int, repeatedElement x: Element)
-           ```
+        ```swift
+        /// `x`를 `n`개 가진 객체를 만든다.
+        init(count n: Int, repeatedElement x: Element)
+        ```
           
     - 모든 선언에서 **선언된 엔터티가 무엇인지 설명해라**
-            ```swift
-                /// 모든 위치에서 효율적인 삽입/삭제를 지원하는 컬렉션 
-                struct List {
-
-                /// `self`의 첫번째 요소, 혹은 비어있을 때 `nil` 
-                var first: Element?
-                ...
-            ```
+        ```swift
+        /// 모든 위치에서 효율적인 삽입/삭제를 지원하는 컬렉션 
+        struct List {
+        
+        /// `self`의 첫번째 요소, 혹은 비어있을 때 `nil` 
+        var first: Element?
+        ...
+        ```
        
-- **선택적으로**, 하나 이상의 단락이나 불렛 아이템으로 진행해라. 이때 단락은 빈 라인으로 구분되며 완전한 문장을 쓴다.
+- **선택적으로**, 하나 이상의 단락이나 불렛 아이템으로 진행해라. 이때 단락은 빈 라인으로 구분되며 완전한 문장을 쓴다. 
     ```
     /// output의 각 요소 문자 묘사값을 출력하고               ← 요약
     ///                                              ← Blank line
@@ -82,6 +82,7 @@ last_modified_at: "2022-04-08"
     ///   `CustomStringConvertible`, `debugPrint`.   ⎭
     public func print(
     _ items: Any..., separator: String = " ", terminator: String = "\n")
+    
     ```
         
     - 요약 이후에 정보들은 잘 알려진 [Symbol documentation markup](https://developer.apple.com/library/archive/documentation/Xcode/Reference/xcode_markup_formatting_ref/SymbolDocumentation.html#//apple_ref/doc/uid/TP40016497-CH51-SW1)요소를 적절히 사용한다. 
@@ -180,7 +181,7 @@ last_modified_at: "2022-04-08"
     - 부수 효과가 없는 메서드는 명사로 읽혀져야 한다, e.g. x.distance(to: y), i.successor().
     - 부수 효과가 있는 경우 명령형의 동사를 사용한다, e.g. print(x), x.sort(), x.append(y)
     - Mutating/nonmutating 메서드 쌍을 일관되게 이름 짓는다. Mutating 메서드는 보통 같은 의미의 nonmutating 메서드를 가진다. 그 자리에서 개체를 업데이트하는 mutating 메서드와 다르게 nonmutating 메서드는 새로운 값을 만들어 리턴한다.
-        - 메서드의 동작이 자연스럽게 동사로 표현되는 경우, mutating 메서드에는 명령형을 쓰고, "ed", "ing" 등의 접미사를 써서 nonmutating 메서드를 네이밍해라.
+        - 메서드의 동작이 자연스럽게 동사로 표현되는 경우, mutating 메서드에는 명령형을 쓰고, "ed", "ing" 등의 접미사를 써서 nonmutating 메서드를 네이밍해라.  
             |---|---|
             |x.sort()|z = x.sorted()|
             |x.append(y)|z = x.appending(y)|
@@ -272,9 +273,8 @@ last_modified_at: "2022-04-08"
     var enjoysScubaDiving = true
     ```
     
-- 메서드들이 같은 의미를 공유하거나 서로 다른 도메인에서 작동한다면 **메서드는 이름을 공유할 수 있다.**
-    예를들어 아래는 권장할만 하다. 메서드들은 본질적으로 같은 일을 하기 때문이다.
-    
+- 메서드들이 같은 의미를 공유하거나 서로 다른 도메인에서 작동한다면 **메서드는 이름을 공유할 수 있다.**   
+    예를들어 아래는 권장할만 하다. 메서드들은 본질적으로 같은 일을 하기 때문이다.    
         ```swift
         /// 좋은 예시
         extension Shape {
@@ -290,7 +290,6 @@ last_modified_at: "2022-04-08"
         ```
     
     그리고 geometric 타입과 collection은 서로 다른 도메인이므로, 아래의 경우도 가능하다.
-    
         ```swift
         /// 좋은 예시
         extension Collection where Element : Equatable {
@@ -301,7 +300,6 @@ last_modified_at: "2022-04-08"
         ```
     
     하지만 아래의 index 메서드들은 다른 의미를 가지므로, 다르게 이름 지어져야 한다.
-    
         ```swift
         /// 나쁜 예시
         extension Database {
@@ -543,6 +541,75 @@ last_modified_at: "2022-04-08"
 ---
     
 # 실무에서 내가 제안하는 스타일 가이드
+
+### 코드 생김새
+
+    - 줄맞춤
+        - 파일단위 줄 맞춤, 단축키로 쉽게 줄 맞춤할 수 있다.
+            ```
+            /// 줄 맞춤하기 원하는 영역 선택 혹은 Cmd + a
+            Ctrl + i
+            ```
+    - 띄어쓰기
+        - 콜론 ':'의 공간은 오직 오른쪽에 존재한다.
+        
+            ```swift
+            var age: Int
+            ```
+            
+        - 연산자 오버로딩 함수에서 함수이름과 괄호 사이에 한 칸 공백 설정
+            
+            ```swift
+            func ** (lhs: Float, rhs: Float)
+            ```
+            
+        - 이외 함수이름과 괄호 사이 공백은 없다.
+            ```swift
+            func pass(year: Int)
+            ```
+    - 줄바꿈
+        - 최대 길이를 초과하는 경우에 매개변수를 기준으로 줄바꿈한다.
+            
+            ```swift
+            func tableView( _ tableView: UITableView,    
+            cellForRowAt indexPath: IndexPath ) -> UITableViewCell { 
+                return UITableViewCell() 
+            }
+            ```
+        
+        - 매개변수로 전달될 클로저가 1개 초과의 경우, 내려쓰기한다.
+            
+            ```swift
+            UIView.animate( withDuration: 0.2, animations: { 
+                // animation
+            }, completion: { finished in 
+                // completion
+            })
+            ```
+        - 옵셔널 바인딩 시 다음과 같이 줄바꿈한다.
+        
+            ```swift
+                if let age = age, let company = company { } guard let age = age, let company = company else { return }
+            ```
+
+    - MARK 구문을 적절히 활용한다.
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # References
