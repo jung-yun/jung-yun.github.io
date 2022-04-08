@@ -543,7 +543,6 @@ last_modified_at: "2022-04-08"
 # 실무에서 내가 제안하는 스타일 가이드
 
 ### 코드 생김새
-
     - 줄맞춤
         - 파일단위 줄 맞춤, 단축키로 쉽게 줄 맞춤할 수 있다.
             ```
@@ -592,7 +591,44 @@ last_modified_at: "2022-04-08"
                 if let age = age, let company = company { } guard let age = age, let company = company else { return }
             ```
 
-    - MARK 구문을 적절히 활용한다.
+    - MARK 구문을 적절히 활용한다.   
+        - 파일단위 extension이 1개 초과일 경우, MARK 구문을 사용한다.
+        
+    - import
+        - 기본적으로 알파벳 순으로 구분한다.
+        - 애플제공 프레임워크와 서드파티 프레임워크를 구분해서 적으며 이 둘 사이를 한 줄로 구분한다.
+        
+    - 클래스
+        - 클래스 멤버 순서
+            - 정렬 기준은 해당 클래스를 사용하는 입장에서 봤을 때 필요한 정보 순서로 나열한다.
+                1. Types
+                    a. public types
+                    b. private types
+                2. Members
+                    a. inherited member, implement protocol member
+                    b. static member
+                    c. public member
+                    d. private member
+                3. Initializer
+                    a. inherited ionitializer
+                    b. initializer
+                4. Methods
+                    a. inherited methods, implement protocol methods
+                    b. static methods
+                    c. public methods
+                    d. privaet methods
+    - 네이밍
+        - 가급적 함수 이름에서 `get` prefix는 사용하지 않는다.
+            - 추천
+                ```swift
+                func address(for user: User) -> String?
+                ```
+            - 비추천
+                ```swift
+                func getAddress(for user: User) -> String?
+                ```
+    
+        - 이 외에는 기본적인 API 가이드를 따른다.
     
 
 
