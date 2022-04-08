@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: single
 title:  "알아두면 유용할 Figma 단축키(Keyboard Shortcuts) for Mac"
 ---
 

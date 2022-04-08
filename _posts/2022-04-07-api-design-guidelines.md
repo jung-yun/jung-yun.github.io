@@ -1,9 +1,8 @@
-
 ---
 layout: single
 title: "API 디자인 가이드라인(API Design Guidelines) Swift"
 date: "2022-04-07"
-last_modified_at: "2022-04-07"
+last_modified_at: "2022-04-08"
 ---
 
 > Swift 공식 API 디자인 가이드라인의 번역본입니다.
@@ -111,7 +110,7 @@ last_modified_at: "2022-04-07"
         ```
     
         만약 위 메서드 시그네쳐에서 `at`을 지운다면, 독자에게 x 값의 요소를 찾아서 지우라는 것을 암시할 수 있다. 실제로는 x가 요소의 포지션인데도 말이다.
-        ```
+        ```swift
         employees.remove(x) // 불확실함: x라는 요소를 지우는 것인가?
         ```
     
@@ -124,7 +123,7 @@ last_modified_at: "2022-04-07"
         ```
         
         이 경우에 Element는 유의미한 정보를 전달하고 있지 않다고 본다. 아래로 개선할 수 있다.
-        ```
+        ```swift
         public mutating func remove(_ member: Element) -> Element?
 
         allViews.remove(cancelButton) // clearer
@@ -173,7 +172,7 @@ last_modified_at: "2022-04-07"
     ```
     
     실제론 이 규칙과 argument labels 규칙이 합쳐서 value preserving type conversion이 아닌 경우에만 첫 argument의 label이 가능한 것으로 이해하면 된다.
-    ```
+    ```swift
     let rgbForeground = RGBColor(cmykForeground)
     ```
 
@@ -186,7 +185,7 @@ last_modified_at: "2022-04-07"
             |x.sort()|z = x.sorted()|
             |x.append(y)|z = x.appending(y)|
             
-            - nonmutating 메서드는 과거형(흔히 "ed")를 쓰는 것을 선호해라.
+            - nonmutating 메서드는 과거형(흔히 "ed")를 쓰는 것을 지향해라.
                 ```swift
                 /// `self`를 그 자리에서 뒤집는다.
                 mutating func reverse()
@@ -211,6 +210,7 @@ last_modified_at: "2022-04-07"
                 ```
                 
         - 동작이 자연스럽게 명사로 표현된 경우, nonmutating 메서드는 명사로 표현하고 mutating 메서드는 "form" 접두어를 붙여 표현해라.
+            
             |---|---|
             |x = y.union(z)|y.formUnion(z)|
             |j = c.successor(i)|c.formSuccessor(&i)|
@@ -221,17 +221,334 @@ last_modified_at: "2022-04-07"
 - 다른 타입, 프로퍼티, 변수, 그리고 상수는 명사로 읽혀야 한다.
 
 
-## 전문 용어를 잘 사용해라
+## 전문 용어(Terminology)를 잘 사용해라
 
+> Terminology: 특정한 전문 분야에서 사용되는 언어로 특별한 의미가 있다.
+
+- 만약 좀 더 일반적인 언어로 충분히 대체 가능하다면 **잘 알려져 있지 않은 단어를 피해라.** 만약 "skin"이 목적 달성 상 충분하다면 "epidermis"라는 단어를 쓰지 마라. 전문용어는 커뮤니케이션 툴로서 필수적인 역할을 하지만 정말 필요할때가 아니라면 쓰이지 않아야 한다.
+- 전문 용어를 사용할 땐 **이미 정의된 의미를 사용하라.**
+    전문용어를 사용할 때는 일반적인 단어를 사용했을 때 그 의미가 애매모호하거나 명확하지 않았을 때다. 그러므로 API에서 사용되는 단어는 일반적으로 받아들여지는 의미를 엄격하게 지켜야한다.
+    
+    - **전문가를 놀래키지 마라.**: 이미 그 단어와 익숙한 누군가는 당신이 단어에 새로운 의미를 부여했을 때 놀라거나, 혹은 화낼지도 모른다.
+    - **신입을 헷갈리게 하지마라.**: 그 단어를 처음 보는 누군가는 높은 확률로 웹의 전통적인 의미를 찾을 것이다.
+
+- **축약어(Abbreviation)를 피해라.** 축약어, 특히 일반적인 것이 아니라면 피해야한다.
+    > 축약어의 의도된 의미는 웹 서치로 쉽게 찾을 수 있어야 한다.
+- **관례를 버리지마라.** 신입을 위해 단어를 최적화 하는데 그것이 현재의 관례에 위배되는 것이라면 잘못된 것이다.
+    연속된 데이터 구조를 List라고 칭하지 않고 Array라고 칭하는 것이 좋다. 초보자는 List라는 단어의 의미를 좀 더 빨리 파악할지라도 말이다. Array는 현대 컴퓨팅의 핵심적인 요소로, 모든 개발자가 알고있고 혹은 곧 배울 것이다. 거의 모든 프로그래머가 익숙하거나, 그들이 웹 서치나 질문으로 충분히 원하는 정보를 얻을 수 있는 단어를 써야한다.   
+       
+    특정 프로그래밍 영역, 예를들어 수학에서는, 관례적으로 sin(x)가 verticalPositionOnUnitCircleAtOriginOfEndOfRadiusWithAngle(x)보다 널리 받아들여진다. 이 경우, 관례를 따라야한다는 원칙이, 축약어를 사용하면 안된다는 원칙보다 더 중요하다(완전한 단어는 엄밀히 말하면 sine이지만 말이다). "sin(x)"는 프로그래머가 몇 십년동안 사용해왔고, 수학자들의 경우에는 몇 세기나 사용해온 단어다.   
+    
 
 # 관습(Conventions)
 
-## 일반적인 관습
+## 일반적인 관습(General Conventions)
+- **O(1)이 아닌 computed 프로퍼티의 복잡도를 항상 표시해라.** 사람들은 보통 프로퍼티 접근엔 대단한 연산이 필요하지 않다고 가정한다. 이는 stored 프로퍼티의 개념이 그들에게 익숙하기 때문이다. 독자들에게 이 가정이 틀릴 수 있음을 명시해라.
+- **free function(non-member function)보다 메서드나 프로퍼티를 지향해라.** Free function은 특별한 경우에만 쓰인다.
+    1. 명확한 self가 없는 경우
+        ```swift
+        min(x, y, z)
+        ```
+    2. function이 제한이 없는 generic인 경우
+        ```swift
+        print(x)
+        ```
+    3. function의 문법이 이미 존재하는 domain notation인 경우
+        ```swift
+        sin(x)
+        ```
+        
+- **대, 소문자 관습을 따라라.** 데이터 타입이나 프로토콜의의 경우 UpperCamelCase, 다른 모든 것은 lowerCamelCase를 따른다.
+    미국의 영어 기준 일반적으로 대문자로 나타나는 두문자어-[Acronyms and initialisms](https://en.wikipedia.org/wiki/Acronym)는 모두 함께 uppercased되거나 downcased돼야 한다.
+    ```swift
+    var utf8Bytes: [UTF8.CodeUnit]
+    var isRepresentableAsASCII = true
+    var userSMTPServer: SecureSMTPServer
+    ```
+    
+    다른 두문자어의 경우 일반적인 단어로 취급된다.
+    ```swift
+    var radarDetector: RadarScanner
+    var enjoysScubaDiving = true
+    ```
+    
+- 메서드들이 같은 의미를 공유하거나 서로 다른 도메인에서 작동한다면 **메서드는 이름을 공유할 수 있다.**
+
+    예를들어 아래는 권장할만 하다. 메서드들은 본질적으로 같은 일을 하기 때문이다.
+    
+        ```swift
+        /// 좋은 예시
+        extension Shape {
+        /// Returns `true` iff `other` is within the area of `self`.
+        func contains(_ other: Point) -> Bool { ... }
+
+        /// Returns `true` iff `other` is entirely within the area of `self`.
+        func contains(_ other: Shape) -> Bool { ... }
+
+        /// Returns `true` iff `other` is within the area of `self`.
+        func contains(_ other: LineSegment) -> Bool { ... }
+        }
+        ```
+
+    그리고 geometric 타입과 collection은 서로 다른 도메인이므로, 아래의 경우도 가능하다.
+    
+        ```swift
+        /// 좋은 예시
+        extension Collection where Element : Equatable {
+        /// Returns `true` iff `self` contains an element equal to
+        /// `sought`.
+        func contains(_ sought: Element) -> Bool { ... }
+        }
+        ```
+    
+    하지만 아래의 index 메서드들은 다른 의미를 가지므로, 다르게 이름 지어져야 한다.
+    
+        ```swift
+        /// 나쁜 예시
+        extension Database {
+        /// Rebuilds 데이터 베이스 탐색 인덱스를 리빌드한다.
+        func index() { ... }
+
+        /// 테이블의 n번 째 로우를 리턴한다.
+        func index(_ n: Int, inTable: TableID) -> TableRow { ... }
+        }
+        ```
+    
+    마지막으로 "리턴 타입만 다른 오버로딩"을 피해라. 이는 현재 무슨 타입을 기대할지 애매하게 만든다.
+    
+        ```swift
+        /// 나쁜 예시
+        extension Box {
+        /// Returns the `Int` stored in `self`, if any, and
+        /// `nil` otherwise.
+        func value() -> Int? { ... }
+
+        /// Returns the `String` stored in `self`, if any, and
+        /// `nil` otherwise.
+        func value() -> String? { ... }
+        }
+        ```
 
 ## 파라미터
 
-## Argument Labels
+> func move(from **start**: Point, to **end**: Point)
 
+- 문서화를 위한 파라미터 이름을 선택해라. 파라미터 이름은 메서드를 이용할 때 사용되진 않지만 메서드에 대해 설명하는데 중요한 역할을 한다.
+
+
+    문서를 읽기 쉽게 파라미터 이름을 설정해라. 예를들어 아래의 이름은 문서를 읽기 쉽게 한다.
+    
+        ```swift
+        /// 좋은 예시
+        
+        /// `predicate`를 만족하는 `Array`를 리턴한다.
+        func filter(_ predicate: (Element) -> Bool) -> [Generator.Element]
+
+        /// `subRange`의 요소를 `newElements`로 대체한다.
+        mutating func replaceRange(_ subRange: Range, with newElements: [E])
+        
+        ```
+    
+    하지만 아래는 문서화를 어색하게 만든다.
+    
+        ```swift
+        /// 나쁜 예시
+        /// `includedInResult`를 만족하는 `Array`를 리턴한다. 
+        func filter(_ includedInResult: (Element) -> Bool) -> [Generator.Element]
+
+        /// `r`로 표현되는 range의 요소를 `with` 로 바꾼다.
+        mutating func replaceRange(_ r: Range, with: [E])
+        ``` 
+    
+- 일반적인 사용을 편하게 하기 위해 **default 파라미터를 적극활용해라.** 사용성이 단일한 파라미터는 default 값으로 대체 가능하다.
+    
+    예를들어 Default arguments는 관련없는 정보를 숨겨서 가독성을 향상시킨다.
+    
+        ```swift
+        /// 나쁜 예시
+        let order = lastName.compare(
+        royalFamilyName, options: [], range: nil, locale: nil)
+        ```
+    
+    위의 코드는 아래로 간단히 바뀔 수 있다.
+    
+        ```swift
+        let order = lastName.compare(royalFamilyName)
+        ```
+    
+    Default argument는 일반적으로 메서드 family의 사용에서 선호된다. 이를 통해 코드를 이해하는 필요한 burden을 낮출 수 있다.
+    
+        ```swift
+        extension String {
+        /// ...description...
+        public func compare(
+         _ other: String, options: CompareOptions = [],
+         range: Range? = nil, locale: Locale? = nil
+        ) -> Ordering
+        }
+        ```
+        
+    위의 코드는 간단해 보이지 않을 수 있지만 아래와 비교하면 훨씬 간단하단 걸 알 수 있다.
+    
+        ```swift
+        extension String {
+          /// ...description 1...
+          public func compare(_ other: String) -> Ordering
+          /// ...description 2...
+          public func compare(_ other: String, options: CompareOptions) -> Ordering
+          /// ...description 3...
+          public func compare(
+             _ other: String, options: CompareOptions, range: Range) -> Ordering
+          /// ...description 4...
+          public func compare(
+             _ other: String, options: StringCompareOptions,
+             range: Range, locale: Locale) -> Ordering
+        }
+        ```
+        
+    모든 메서드 family의 멤버들은 각각 문서화되고 유저는 이를 읽는다. 이 때 메서드를 선택하기 위해 유저들은 모든 메서드를 이해해야한다. 메서드들 사이의 직관적이지 않은 관계들( 예를들어 foo(bar: nil)과 foo()는 항상 같은 동작을 하는 것이 아니라는 것)은 문서에서도 거의 똑같은 문장을 반복하는 등 불필요한 프로세스를 증가시킨다. 따라서 메서드 패밀리 대신 하나의 메서드에서 default 파라미터를 쓰는 것이 우월하다.
+    
+- **Default 값을 가진 파라미터는 파라미터 리스트 순서상 끝 쪽으로 밀어라.** 메서드에서 보통 default 값이 없는 파라미터가 의미상 좀 더 중요한 역할을 하고, 이를 앞쪽에 둬서 메서드가 불릴 때 안정적인 initial pattern을 만들 수 있다.    
+
+
+## Argument Labels
+> func move(**from** start: Point, **to** end: Point)   
+> x.move(**from**: x, **to**: y)
+
+- **arguments간 구분이 딱히 필요하지 않을 때는 모든 레이블을 생략하라.** 예를들어 min(number1, number2), zip(sequence1, sequence2)
+- **이니셜라이저가 value preserving type conversion를 수행할 때는 첫 번째 레이블을 생략해라.** 예를들어 Int64(someUInt32)
+     
+    첫 번째 argument는 항상 conversion의 소스가 돼야한다.
+    
+        ```swift
+        extension String {
+        // `x`의 radix값을 기준으로 한 textual representation을 만든다.
+        init(_ x: BigInt, radix: Int = 10)   ← 첫 부분의 언더스코어를 보라
+        }
+
+        text = "The value is: "
+        text += String(veryLargeNumber)
+        text += " and in hexadecimal, it's"
+        text += String(veryLargeNumber, radix: 16)
+        ```
+    
+    하지만 그 범위를 좁히는 type conversion에서는, 무엇을 어떻게 줄이는지에 대한 레이블을 적어주면 좋다.
+     
+        ```swift
+        extension UInt32 {
+        /// Creates an instance having the specified `value`.
+        init(_ value: Int16)            ← Widening, so no label
+        /// Creates an instance having the lowest 32 bits of `source`.
+        init(truncating source: UInt64)
+        /// Creates an instance having the nearest representable
+        /// approximation of `valueToApproximate`.
+        init(saturating valueToApproximate: UInt64)
+        }
+        ```
+    
+- **첫 번째 argument가 전치사구와 같은 역할을 할 때는, 레이블을 적어라.** augument label는 보통 전치사로 시작해야한다, e.g. x.removeBoxes(havingLength: 12).
+    
+    예외는 첫 번째 두 argument가 똑같은 추상의 일부분씩 표현하는 경우, 예를들어
+    
+        ```swift
+        /// 나쁜 예시
+        a.move(toX: b, y: c)
+        a.fade(fromRed: b, green: c, blue: d)
+        ```
+        
+    위와 같은 경우 전치사 이후에 argument label을 시작해서 그 의미를 명확하게 할 수 있다.
+        ```swift
+        /// 좋은 예시
+        a.moveTo(x: b, y: c)
+        a.fadeFrom(red: b, green: c, blue: d)
+        ```
+        
+- **하지만 argument label이 아니라 argument 자체가 문법에 맞는 구절을 만들어낸다면, 레이블을 생략해라.** 예를들어 x.addSubview(y)
+
+    반대로 만약 argument가 그 자체로 문법에 맞는 구절을 만들어내지 않는다면, 레이블을 붙여라.
+    
+        ```swift
+        view.dismiss(animated: false)
+        let text = words.split(maxSplits: 12)
+        let studentsByName = students.sorted(isOrderedBefore: Student.namePrecedes)
+        ```
+    
+    구절이 항상 옳은 의미를 전달하는 것이 중요하단 걸 생각해라. 아래의 예는 문법상 맞지만 의미가 애매모호하다.
+    
+        ```swift
+        view.dismiss(false)   // dismiss하지 말라는 것일까? 혹은 false를 dismiss하라는 것일까? 
+        words.split(12)       // 숫자 12를 나누라는 것일까?
+        ```
+        
+- **다른 모든 augument는 label을 붙인다.** 
 
 # Special Instructions
 
+- API에 나타나는 튜플의 멤버와 클로져의 parameter을 레이블링 하라.
+
+    이러한 이름들로 설명하기가 쉬워지고, 해당 요소들이 문서에 언급될 수 있으며, 튜플 요소에 접근하는 표현을 가능하게 한다.
+    
+        ```swift
+        /// Ensure that we hold uniquely-referenced storage for at least
+        /// `requestedCapacity` elements.
+        ///
+        /// If more storage is needed, `allocate` is called with
+        /// `byteCount` equal to the number of maximally-aligned
+        /// bytes to allocate.
+        ///
+        /// - Returns:
+        ///   - reallocated: `true` iff a new block of memory
+        ///     was allocated.
+        ///   - capacityChanged: `true` iff `capacity` was updated.
+        mutating func ensureUniqueStorage(
+        minimumCapacity requestedCapacity: Int, 
+        allocate: (_ byteCount: Int) -> UnsafePointer<Void>
+        ) -> (reallocated: Bool, capacityChanged: Bool)
+        ```
+        
+    클로져 파라미터로 선택되는 이름들은 top-level functions을 위한 parameter names처럼 선택되야 한다. 클로져 argument label들은 호출시 사용이 허용되지 않는다.
+    
+- 오버로드 세트의 애매모호함을 피하기 위해서 unconstrained polymorphism 사용에 주의해라(e.g. Any, AnyObject, 그리고 unconstrained generic parameters).
+       
+    예를들어 아래의 오버로드 세트를 살펴보면
+    
+        ```swift
+        struct Array {
+        /// Inserts `newElement` at `self.endIndex`.
+        public mutating func append(_ newElement: Element)
+
+        /// Inserts the contents of `newElements`, in order, at
+        /// `self.endIndex`.
+        public mutating func append(_ newElements: S)
+        where S.Generator.Element == Element
+        }
+        ```
+        
+    위의 메서드들은 의미적으로 비슷하게 묶이는데, argument의 타입들도 명확하게 구별되는 것 처럼 보인다. 하지만 Element가 Any일 땐, 하나의 요소나 요소들의 집합이 똑같이 취급될 수 있음에 주의해야 한다.
+    
+        ```swift
+        var values: [Any] = [1, "a"]
+        values.append([2, 3, 4]) // [1, "a", [2, 3, 4]] or [1, "a", 2, 3, 4]?
+        ```
+    
+    이런 애매모호함을 없애기 위해, 두번째 오버로드를 좀 더 명확하게 적어줘야 한다.
+    
+        ```swift
+        struct Array {
+        /// Inserts `newElement` at `self.endIndex`.
+        public mutating func append(_ newElement: Element)
+
+        /// Inserts the contents of `newElements`, in order, at
+        /// `self.endIndex`.
+        public mutating func append(contentsOf newElements: S)
+        where S.Generator.Element == Element
+        }
+        ```
+        
+    또 이때 앞서 말했던 labeling이 문서에서의 언급을 어떻게 용의하게 하는지도 알 수 있다.
+    
+    
+
+---
+    
+# 실무에서 내가 제안하는 스타일 가이드
