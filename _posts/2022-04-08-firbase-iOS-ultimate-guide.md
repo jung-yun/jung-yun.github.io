@@ -8,9 +8,10 @@ last_modified_at: "2022-04-08"
 <br>
 > Reference의 미디엄 포스트를 제 입맛대로 읽고 해석했습니다. 의역, 오역, 특히 생략된 부분이 있을 수 있으니 원본 포스트를 참고하시는 걸 권장드립니다.
 
+<br>
+
 # Firebase 간단 소개
 
-<br>
 > Firebase is Google’s mobile application development platform that helps you build, improve, and grow your app.
 
 <br>
@@ -33,8 +34,6 @@ Firebase는 앱을 빌드하고, 개선하고, 키우는데 필요한 toolset이
 firebase가 백엔드를 대체한다곤 하지만 백엔드 개발자의 필요성이 완전히 사라지는 것은 아니다. 다양한 이유들로 백엔드는 있어야하고 firebase는 그 백엔드 개발을 도울 수 있다.
 
 <br>
-<br>
-
 Firebase의 동작때문에 어떤 이들은 firebase를 "platform as a service" 혹은 "backend as a service"라고 부를지도 모른다. 하지만 이렇게 단순히 정의되는 것이 조금은 맞지 않는것 처럼 느껴진다. Firebase는 firebase다. 아래는 firebase에서 제공하는 프로덕트 목록이다.
 
 
@@ -82,9 +81,7 @@ Firebase 제품군 중 "build" 그룹에 해당하는 제품들은 아래와 같
 
   
 > 다른 기능들은 내가 실제로 Firebase의 여러 기능들을 사용하게 될 때 내용을 추가
-
 <br>
-
 ### **Grow you app** -- attract and retain users
 
 "Grow" 그룹의 제품들은 아래와 같다. <br>
