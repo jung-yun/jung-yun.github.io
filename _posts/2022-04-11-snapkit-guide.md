@@ -117,36 +117,53 @@ extension QuizViewController {
 
 만약 단순히 몇개의 Constant만을 바꾸는 것이 아닌, constraint 전체를 바꾸고 싶다면, SnapKit은 `remakeConstraints(_:)`라는 유용한 메서드를 제공한다. 
 
+```swift
+  viewProgress.snp.remakeConstraints { make in
+    make.top.equalTo(view.safeAreaLayoutGuide)
+    make.width.equalToSuperview().multipliedBy(progress)
+    make.height.equalTo(32)
+    make.leading.equalToSuperview()
+    }
+```
+<br>
 
+## Keeping Reference
 
+기본 `NSLayoutConstraint`에서도 constraint를 저장해서 후에 수정하는 것이 가능하다. 이것은 SnapKit에서 또한 가능한데, `Constraint`타입을 사용하면 된다.
 
+```swift
+var topConstraint: Constraint?
 
+lblTimer.snp.makeConstraints { make in 
+  // constraint를 저장
+  self.topConstraint = make.top.equalToSuperview().inset(16)
+  make.leading.trailing.bottom.equalToSuperView()
+}
 
+// 이후에 이렇게 수정할 수 있다.
+self.topConstraint?.update(inset: 32)
 
+// 아니라면 비활성화 할 수도 있다.
+self.topConstraint?.deactivate()
+```
+<br>
 
+## SnapKit을 이용한 AutoLayout 디버깅
 
+Auto Layout을 사용하다 Constraint들 사이에 모순이 발생하면 엄청난 양의 로그가 콘솔에 찍히는데 이런 로그는 직관적으로 이해하기 힘들다. 이를 해결하기 위해 SnapKit은 `labeled(_:)`라는 추가적인 modifier를 제공한다.
 
+```swift
+lblTimer.snp.makeConstraints { make in
+  make.width.equalToSuperview().multipliedBy(0.45).labeled("timerWidth")
+  make.height.equalTo(45).labeled("timerHeight")
+  make.top.equalTo(viewProgress.snp.bottom).offset(32).labeled("timerTop")
+  make.centerX.equalToSuperview().labeled("timerCenterX")
+  make.centerY.equalToSuperview().labeled("timerCenterY")
+}
 
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```
+<br>
+각 constraint 뒤의 `labeled(_:)`가 해당 constraint를 설명하는 title이 되어준다. 이렇게하면 로그 창의 메모리 주소를 보며 스트레스를 받을일이 현저히 줄어든다. 
 
 
 
@@ -165,4 +182,4 @@ extension QuizViewController {
 
 # Reference
 
-- [SnapKit for iOS: Constraints in a Snap]()
+- [SnapKit for iOS: Constraints in a Snap](https://www.raywenderlich.com/3225401-snapkit-for-ios-constraints-in-a-snap)
