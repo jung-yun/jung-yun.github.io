@@ -166,20 +166,7 @@ lblTimer.snp.makeConstraints { make in
 각 constraint 뒤의 `labeled(_:)`가 해당 constraint를 설명하는 title이 되어준다. 이렇게하면 로그 창의 메모리 주소를 보며 스트레스를 받을일이 현저히 줄어든다. 
 
 
-
-
-
-
-
-
-
-
-<br>      
-
-<img src="/assets/images/4-firebaseSubBackend.png" width="90%" height="90%" title="" alt="ERROR:cannot load image"/>  
-
-<figcaption align = "center"><b>from: https://medium.com/firebase-developers/what-is-firebase-the-complete-story-abridged-bcc730c5f2c0</b></figcaption>
-
 # Reference
 
 - [SnapKit for iOS: Constraints in a Snap](https://www.raywenderlich.com/3225401-snapkit-for-ios-constraints-in-a-snap)
+- [SnapKit Demonstration Sample Project](https://github.com/jung-yun/snapkit-demo-swift)
