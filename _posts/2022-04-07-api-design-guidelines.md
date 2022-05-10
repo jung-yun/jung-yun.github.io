@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: single
 title: "API 디자인 가이드라인(API Design Guidelines) Swift"
 date: "2022-04-07"
 last_modified_at: "2022-04-08"
