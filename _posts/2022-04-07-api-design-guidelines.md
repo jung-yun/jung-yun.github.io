@@ -173,6 +173,7 @@ last_modified_at: "2022-04-08"
     ```
     
     실제론 이 규칙과 argument labels 규칙이 합쳐서 value preserving type conversion이 아닌 경우에만 첫 argument의 label이 가능한 것으로 이해하면 된다.
+    
     ```swift
     let rgbForeground = RGBColor(cmykForeground)
     ```
@@ -235,6 +236,7 @@ last_modified_at: "2022-04-08"
 
 - **축약어(Abbreviation)를 피해라.** 축약어, 특히 일반적인 것이 아니라면 피해야한다.
     > 축약어의 의도된 의미는 웹 서치로 쉽게 찾을 수 있어야 한다.
+    
 - **관례를 버리지마라.** 신입을 위해 단어를 최적화 하는데 그것이 현재의 관례에 위배되는 것이라면 잘못된 것이다.
     연속된 데이터 구조를 List라고 칭하지 않고 Array라고 칭하는 것이 좋다. 초보자는 List라는 단어의 의미를 좀 더 빨리 파악할지라도 말이다. Array는 현대 컴퓨팅의 핵심적인 요소로, 모든 개발자가 알고있고 혹은 곧 배울 것이다. 거의 모든 프로그래머가 익숙하거나, 그들이 웹 서치나 질문으로 충분히 원하는 정보를 얻을 수 있는 단어를 써야한다.   
        
@@ -260,21 +262,24 @@ last_modified_at: "2022-04-08"
         ```
         
 - **대, 소문자 관습을 따라라.** 데이터 타입이나 프로토콜의의 경우 UpperCamelCase, 다른 모든 것은 lowerCamelCase를 따른다.
-    미국의 영어 기준 일반적으로 대문자로 나타나는 두문자어-[Acronyms and initialisms](https://en.wikipedia.org/wiki/Acronym)는 모두 함께 uppercased되거나 downcased돼야 한다.
+    미국의 영어 기준 일반적으로 대문자로 나타나는 두문자어-[Acronyms and initialisms](https://en.wikipedia.org/wiki/Acronym)는 모두 함께 uppercased되거나 downcased돼야 한다.<br>
+    
     ```swift
     var utf8Bytes: [UTF8.CodeUnit]
     var isRepresentableAsASCII = true
     var userSMTPServer: SecureSMTPServer
     ```
     
-    다른 두문자어의 경우 일반적인 단어로 취급된다.
+    다른 두문자어의 경우 일반적인 단어로 취급된다.<br>
+    
     ```swift
     var radarDetector: RadarScanner
     var enjoysScubaDiving = true
     ```
     
 - 메서드들이 같은 의미를 공유하거나 서로 다른 도메인에서 작동한다면 **메서드는 이름을 공유할 수 있다.**   
-    예를들어 아래는 권장할만 하다. 메서드들은 본질적으로 같은 일을 하기 때문이다.    
+    예를들어 아래는 권장할만 하다. 메서드들은 본질적으로 같은 일을 하기 때문이다.<br>
+        
         ```swift
         /// 좋은 예시
         extension Shape {
@@ -289,7 +294,8 @@ last_modified_at: "2022-04-08"
         }
         ```
     
-    그리고 geometric 타입과 collection은 서로 다른 도메인이므로, 아래의 경우도 가능하다.
+    그리고 geometric 타입과 collection은 서로 다른 도메인이므로, 아래의 경우도 가능하다.<br>
+    
         ```swift
         /// 좋은 예시
         extension Collection where Element : Equatable {
@@ -299,7 +305,8 @@ last_modified_at: "2022-04-08"
         }
         ```
     
-    하지만 아래의 index 메서드들은 다른 의미를 가지므로, 다르게 이름 지어져야 한다.
+    하지만 아래의 index 메서드들은 다른 의미를 가지므로, 다르게 이름 지어져야 한다. <br>
+        
         ```swift
         /// 나쁜 예시
         extension Database {
@@ -311,7 +318,7 @@ last_modified_at: "2022-04-08"
         }
         ```
     
-    마지막으로 "리턴 타입만 다른 오버로딩"을 피해라. 이는 현재 무슨 타입을 기대할지 애매하게 만든다.
+    마지막으로 "리턴 타입만 다른 오버로딩"을 피해라. 이는 현재 무슨 타입을 기대할지 애매하게 만든다.<br>
     
         ```swift
         /// 나쁜 예시
