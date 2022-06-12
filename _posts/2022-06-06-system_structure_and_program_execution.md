@@ -1,12 +1,12 @@
-
 ---
 layout: single
 title: "System Structure & Program Execution"
 date: "2022-06-06"
 last_modified_at: "2022-06-12"
 ---
-
+<br>
 > CPU의 헤르츠 정보는 초당 얼마나 데이터를 처리하는지 나타냄 (GHz는 약 초당 32억번의 사이클)
+<div></div>
 > 비트 정보는 한번에 얼마나 많은 데이터를 처리할 수 있느냐. 32비트는 2의 32승, 64비트는 2의 64승 만큼의 데이터를 처리
 
 # 컴퓨터 시스템 구조
@@ -50,13 +50,14 @@ interrupt line: interrupt가 없다면 프로그램 계속 실행. 있으면 운
 ### Device Controller & Device Driver
 
 Device Driver: OS 코드 중 각 장치별 처리루틴 -> Device Controller와 다르게 소프트웨어다.
+<br>
 
 ### 인터럽트
 
 I/O Device가 인터럽트를 통해 CPU에게 정보를 전달
 
 인터럽트 당한 시점의 레지스터와 program counter를 save한 후 CPU의 제어를 인터럽트 처리 루틴에 넘긴다.<br>
-    - 하드웨어 인터럽트: 하드웨어가 발생시킨 인터럽트
+    - 하드웨어 인터럽트: 하드웨어가 발생시킨 인터럽트<br>
     - Trap: (소프트웨어 인터럽트)
         - **Exception**: 프로그램이 오류를 범한 경우
         - **System call**: 프로그램이 커널 함수를 호출한 경우
@@ -65,7 +66,8 @@ I/O Device가 인터럽트를 통해 CPU에게 정보를 전달
 
 - 인터럽트 벡터: 해당 인터럽트의 처리 루틴 주소를 가지고 있음
 - 인터럽트 처리 루틴(= Interrupt Sever Rutine): 해당 인터럽트를 처리하는 커널 함수
-                
+<br>
+
 ### 인터럽트의 종류
 
 - device controller interrupt
@@ -119,8 +121,8 @@ Magnetic Disk - Optical Disk - Magnetic Tape:<br>
 고용량, 느림, 비휘발성, 단위 면적당 가격이 쌈, Secondary(Executable) 
 <br>
 > Volatility(휘발성) - 전원이 나가면 데이터가 사라짐
-<br>
-Caching: copyint information into fater storage system
+<div></div>
+> Caching: copyint information into fater storage system
 <br>
 빠르게 접근하기 위해 접근이 빠른 저장소에 저장해 놓는 것. 저용량이기 때문에 새로운 것을 읽어들이면 기존의 것을 쫓아내야함.
 
@@ -131,7 +133,7 @@ File system -> Virtual memory -> Physical memory(커널 항상 존재)<br>
 실제 프로그램의 모든 데이터를 피지컬 메모리에 올려두지 않는데 그 이유는 피지컬 메모리 낭비가 되기 때문. 그래서 필요한 함수 등만 메모리에 올려 놓는다. 나머지 필요하지 않은 부분은 디스크, Swap area에 내려놓게 된다. Virtual memory는 가상의 주소공간으로 실제로 존재하는 주소가 아니다. Virtual Memory는 각 프로그램이 독자적으로 가지고 있다.<br>
 
 > Virtual Memory는 전원이 나가면 사라진다. 반대로 File system에 있는 것은 보관된다.
-<br>
+<div></div>
 > 메모리 주소변환(Address translation) 가상 메모리를 실제 메모리로 올릴때 주소를 정하는 것.
 
 ### 커널 주소 공간의 내용
